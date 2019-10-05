@@ -20,6 +20,7 @@ public class Bot extends TelegramLongPollingBot {
         update.getUpdateId();
         chat_id = update.getMessage().getChatId();
         SendMessage sendMessage = new SendMessage().setChatId(chat_id);
+        setButtons(sendMessage);
         sendMessage.setText(input(update.getMessage().getText()));
         try {
             execute(sendMessage);
@@ -37,8 +38,14 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public String input(String msg) {
-        if(msg.contains("Hello") || msg.contains("Hi") || msg.contains("Привет")){
-            return "Hello, my friend!";
+        if( msg.toLowerCase().contains("hello") || msg.toLowerCase().contains("hi") || msg.toLowerCase().contains("привет")){
+            return "Приветсвую тебя, другой мой";
+        }
+        if (msg.contains("Каво?")){
+            return "Это простой бот который пока что может дублировать Ваши сообщения, остальное будет позже";
+        }
+        if (msg.contains("[В разработке]")){
+            return "Этот раздел пока в разработке, попробуйте что-нибудь другое";
         }
         return msg;
     }
@@ -51,23 +58,20 @@ public class Bot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
-        // Создаем список строк клавиатуры
         List<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
 
-        // Первая строчка клавиатуры
         KeyboardRow keyboardFirstRow = new KeyboardRow();
-        // Добавляем кнопки в первую строчку клавиатуры
+
         keyboardFirstRow.add(new KeyboardButton("Привет"));
+        keyboardFirstRow.add(new KeyboardButton("[В разработке]"));
 
-        // Вторая строчка клавиатуры
         KeyboardRow keyboardSecondRow = new KeyboardRow();
-        // Добавляем кнопки во вторую строчку клавиатуры
-        keyboardSecondRow.add(new KeyboardButton("Помощь"));
 
-        // Добавляем все строчки клавиатуры в список
+        keyboardSecondRow.add(new KeyboardButton("Каво?"));
+
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboardSecondRow);
-        // и устанваливаем этот список нашей клавиатуре
+
         replyKeyboardMarkup.setKeyboard(keyboard);
     }
 }
