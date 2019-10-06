@@ -46,7 +46,7 @@ public class Bot extends TelegramLongPollingBot {
         KeyboardRow keyboardSecondRow = new KeyboardRow();
 
         if( msg.toLowerCase().contains("hello") || msg.toLowerCase().contains("hi") || msg.toLowerCase().contains("привет")){
-            keyboardFirstRow.add(new KeyboardButton("Как дела у бота?"));
+            keyboardFirstRow.add(new KeyboardButton("Проверить делишки бота"));
             keyboardFirstRow.add(new KeyboardButton("[В разработке]"));
             keyboardSecondRow.add(new KeyboardButton("Каво?"));
             keyboard.add(keyboardFirstRow);
