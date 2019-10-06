@@ -11,13 +11,13 @@ import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
 
-    private long chat_id;
-    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+    private ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+    BotData botData = new BotData();
 
     @Override
     public void onUpdateReceived(Update update) {
         update.getUpdateId();
-        chat_id = update.getMessage().getChatId();
+        long chat_id = update.getMessage().getChatId();
         SendMessage sendMessage = new SendMessage().setChatId(chat_id);
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
         sendMessage.setText(input(update.getMessage().getText()));
@@ -29,14 +29,14 @@ public class Bot extends TelegramLongPollingBot {
     }
     @Override
     public String getBotUsername() {
-        return "@coolshortgamebot";
+        return botData.botUserName;
     }
     @Override
     public String getBotToken() {
-        return "884804841:AAFL7evBxdUw-RvWM-7G9In6GbB_jp4M7Vk";
+        return botData.botToken;
     }
 
-    public String input(String msg) {
+    private String input(String msg) {
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
@@ -62,6 +62,9 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (msg.contains("Проверить делишки бота")) {
             return "У меня все хорошо, спасибо, что интересуетесь♥";
+        }
+        if (msg.contains("/start")){
+            return "Поздоровался бы хоть...";
         }
         return msg;
     }
