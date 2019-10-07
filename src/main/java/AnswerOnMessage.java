@@ -1,5 +1,5 @@
-public class AnswerOnMessage {
-    public static String getAnswer(String msg) {
+class AnswerOnMessage {
+    static String getAnswer(String msg) {
         if( msg.toLowerCase().contains("hello") || msg.toLowerCase().contains("hi") || msg.toLowerCase().contains("привет")){
             return "Приветствую тебя, друг мой, чего желаешь?";
         }
