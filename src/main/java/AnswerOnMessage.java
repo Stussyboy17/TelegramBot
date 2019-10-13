@@ -8,23 +8,19 @@ class AnswerOnMessage {
     private static String word;
 
 
-    static String getAnswer(String msg, SendMessage sendMessage, Update update) {
+    static String getAnswer(String msg, SendMessage sendMessage) {
         if (isPlaying){
             if (msg.contains("/stop")) {
                 isPlaying = false;
                 return "Игра остановлена";
             }
-            gameLogic.setNewKeyboard(sendMessage, Character.toString(msg.charAt(0)));
-            if (word.contains(msg)) {
-                if (gameLogic.answerMessage(word).contains(word)) {
-                    isPlaying = false;
-                    gameLogic.setStandardKeyboard(sendMessage);
-                }
-                return gameLogic.answerMessage(word);
+            if (gameLogic.isPlaying) {
+                String message = Character.toString(msg.charAt(0)).toUpperCase();
+                gameLogic.setNewKeyboard(sendMessage, message);
+                return gameLogic.answerMessage(word, message);
             }
-            else{
-                return "Неверная буква!";
-            }
+            isPlaying = false;
+            return "Что делаем дальше?";
         }
         else {
             if (msg.toLowerCase().contains("hello") || msg.toLowerCase().contains("hi") || msg.toLowerCase().contains("привет")) {
@@ -45,7 +41,7 @@ class AnswerOnMessage {
             if (msg.contains("/start")) {
                 return "Поздоровался бы хоть...";
             }
-            return "Game";
+            return "";
         }
     }
 }

@@ -10,46 +10,67 @@ class GameLogic {
 
     private ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     private List<String> letters;
-    private List<String> rightLetters;
+    private List<String> deletedLetters;
+    private int lives;
+    boolean isPlaying;
 
     GameLogic(){
         letters = getLetters();
-        rightLetters = new ArrayList<>();
+        deletedLetters = new ArrayList<>();
+        lives = 8;
+        isPlaying = true;
     }
 
     void setNewKeyboard(SendMessage sendMessage, String letter){
         letters.remove(letter);
-        rightLetters.add(letter);
+        deletedLetters.add(letter);
         setReplyKeyboardMarkup(sendMessage);
     }
 
-    String answerMessage(String word){
-        StringBuilder answer = new StringBuilder();
-        answer.append("➖".repeat(word.length()));
+    String answerMessage(String word, String message){
+        System.out.println(isPlaying);
+        StringBuilder unknownWord = new StringBuilder();
+        unknownWord.append("➖".repeat(word.length()));
         for (int i = 0; i < word.length(); i++){
-            for (String rightLetter : rightLetters)
-                if (word.charAt(i) == rightLetter.charAt(0))
-                    answer.setCharAt(i, rightLetter.charAt(0));
+            for (String deletedLetter : deletedLetters)
+                if (word.charAt(i) == deletedLetter.charAt(0)) {
+                    unknownWord.setCharAt(i, deletedLetter.charAt(0));
+                }
         }
-        if (answer.toString().equals(word)){
+        if (!unknownWord.toString().contains(message)) {
+            lives--;
+        }
+        StringBuilder answer = new StringBuilder();
+        States states = new States();
+        answer.append(states.states.get(lives));
+        answer.append("\n");
+        answer.append("Слово: ");
+        if (lives == 0){
+            answer.append("Загаданное слово - ");
+            answer.append(word);
             answer.append("\n");
-            answer.insert(0, "Загаданное слово - ");
-            answer.append("Ты выиграл, поздравляю!!!");
+            answer.append("Ты проиграл!!!");
+            isPlaying = false;
             return answer.toString();
         }
-        answer.insert(0,"Слово: ");
+        if (unknownWord.toString().equals(word)){
+            answer.append(word);
+            answer.append("\n");
+            answer.append("Ты выиграл, поздравляю!!!");
+            isPlaying = false;
+            return answer.toString();
+        }
+        answer.append(unknownWord);
         return answer.toString();
     }
 
     String startGame(SendMessage sendMessage, String word){
         setReplyKeyboardMarkup(sendMessage);
-
-        StringBuilder answer = new StringBuilder();
-        answer.append("Слово: ");
-        for (int i = 0; i < word.length(); i++){
-            answer.append("➖");
-        }
-        return answer.toString();
+        States states = new States();
+        return states.states.get(8) +
+                "\n" +
+                "Слово: " +
+                "➖".repeat(word.length());
     }
 
     private List<String> getLetters(){
@@ -64,7 +85,7 @@ class GameLogic {
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
-        List<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
+        List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow keyboardRow = new KeyboardRow();
         for(int i = 0; i < letters.size(); i++){
             keyboardRow.add(letters.get(i));
@@ -88,7 +109,7 @@ class GameLogic {
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
-        List<KeyboardRow> keyboard = new ArrayList<KeyboardRow>();
+        List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
         KeyboardRow keyboardSecondRow = new KeyboardRow();
         keyboardFirstRow.add(new KeyboardButton("Проверить делишки бота"));
