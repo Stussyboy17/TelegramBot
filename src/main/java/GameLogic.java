@@ -50,6 +50,7 @@ class GameLogic {
             answer.append(word);
             answer.append("\n");
             answer.append("Ты проиграл!!!");
+            setAfterGameKeyboard();
             isPlaying = false;
             return answer.toString();
         }
@@ -57,11 +58,21 @@ class GameLogic {
             answer.append(word);
             answer.append("\n");
             answer.append("Ты выиграл, поздравляю!!!");
+            setAfterGameKeyboard();
             isPlaying = false;
             return answer.toString();
         }
         answer.append(unknownWord);
         return answer.toString();
+    }
+
+    private void setAfterGameKeyboard() {
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        keyboardFirstRow.add(new KeyboardButton("Сыграем ещё!"));
+        keyboardFirstRow.add(new KeyboardButton("Я больше не хочу играть"));
+        keyboard.add(keyboardFirstRow);
+        replyKeyboardMarkup.setKeyboard(keyboard);
     }
 
     String startGame(SendMessage sendMessage, String word){
@@ -99,11 +110,8 @@ class GameLogic {
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
     }
 
-    void setStandardKeyboard(SendMessage sendMessage){
-        setStandardKeyboard(sendMessage, replyKeyboardMarkup);
-    }
 
-    static void setStandardKeyboard(SendMessage sendMessage, ReplyKeyboardMarkup replyKeyboardMarkup) {
+    static void setStandardKeyboard(ReplyKeyboardMarkup replyKeyboardMarkup, SendMessage sendMessage) {
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);

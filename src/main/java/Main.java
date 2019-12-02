@@ -13,6 +13,7 @@ public class Main {
         Bot bot = new Bot();
         try {
             telegram.registerBot(bot);
+            System.out.println("Connection done, bot running");
         } catch (TelegramApiRequestException e) {
             e.printStackTrace();
         }

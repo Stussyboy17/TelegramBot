@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Bot extends TelegramLongPollingBot {
 
-    private ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+    private static ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     private BotData botData = new BotData();
 
     @Override
@@ -23,6 +23,7 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
+
     @Override
     public String getBotUsername() {
         return botData.botUserName;
@@ -32,7 +33,7 @@ public class Bot extends TelegramLongPollingBot {
         return botData.botToken;
     }
 
-    private void setKeyboard(SendMessage sendMsg){
-        GameLogic.setStandardKeyboard(sendMsg, replyKeyboardMarkup);
+    static void setKeyboard(SendMessage sendMessage){
+        GameLogic.setStandardKeyboard(replyKeyboardMarkup, sendMessage);
     }
 }

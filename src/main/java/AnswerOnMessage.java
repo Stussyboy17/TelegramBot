@@ -19,14 +19,26 @@ class AnswerOnMessage {
                 gameLogic.setNewKeyboard(sendMessage, message);
                 return gameLogic.answerMessage(word, message);
             }
-            isPlaying = false;
-            return "Что делаем дальше?";
+            if (msg.contains("Я больше не хочу играть")) {
+                Bot.setKeyboard(sendMessage);
+                isPlaying = false;
+                return "Ну ладно, пиши, если что;)";
+            }
+            if (msg.contains("Сыграем ещё!")) {
+                word = game.getRandomWord();
+                gameLogic = new GameLogic();
+                isPlaying = true;
+                return gameLogic.startGame(sendMessage, word);
+            }
+            return "";
         }
         else {
             if (msg.toLowerCase().contains("hello") || msg.toLowerCase().contains("hi") || msg.toLowerCase().contains("привет")) {
+                Bot.setKeyboard(sendMessage);
                 return "Приветствую тебя, друг мой, чего желаешь?";
             }
             if (msg.contains("Каво?")) {
+                Bot.setKeyboard(sendMessage);
                 return "Это простой бот, который пока что может играть с Вами в виселицу, остальное будет позже";
             }
             if (msg.contains("Сыграем в виселицу") || msg.contains("/game")) {
@@ -39,9 +51,10 @@ class AnswerOnMessage {
                 return "У меня все хорошо, спасибо, что интересуетесь♥";
             }
             if (msg.contains("/start")) {
+                Bot.setKeyboard(sendMessage);
                 return "Поздоровался бы хоть...";
             }
-            return "";
+            return "Я не понимаю, чего именно ты хочешь...?";
         }
     }
 }
